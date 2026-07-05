@@ -1,0 +1,26 @@
+# Environment / secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# App data / generated
+chroma_db/
+chat_sessions/*.db
+temp_audio.*
+*.wav
+*.webm
+
+# Downloaded model weights (keep the folder, ignore contents)
+models/**
+!models/.gitkeep
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
