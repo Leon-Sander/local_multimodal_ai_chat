@@ -116,6 +116,17 @@ Running Ollama inside Docker is slow on Windows (system calls are translated bet
 
 Key settings live in `config.yaml` (Ollama base URL and embedding model, Whisper model, Chroma path/collection, chat-sessions DB path). Runtime options (endpoint, model, chunk size/overlap, retrieved chunks, chat memory) are adjustable in the sidebar and persisted per user.
 
+## Testing
+
+A small contract-level test suite covers the SQLite layer, utility functions, and API request construction (UI, audio, and real model calls stay manual by design):
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+
+CI runs the suite on Ubuntu and Windows. See [TESTING.md](./TESTING.md) for the philosophy and what is deliberately not tested.
+
 ## Roadmap
 
 - [ ] Additional model providers (Gemini, others)
