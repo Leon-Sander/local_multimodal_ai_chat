@@ -34,8 +34,8 @@ Local Multimodal AI Chat integrates several AI models behind a single Streamlit 
 
 ```mermaid
 flowchart TD
-    U["User"] --> UI["Streamlit UI (app.py)"]
-    UI -->|"record / upload audio"| W["Whisper ASR (audio_handler)"]
+    U["User"] --> UI["Streamlit UI (src/app.py)"]
+    UI -->|"record / upload audio"| W["Whisper ASR (src/audio_handler)"]
     W --> R["ChatAPIHandler router"]
     UI -->|"text / image / PDF / commands"| R
     UI -->|"upload PDF"| P["PDF handler: pypdfium2 + chunking"]
@@ -50,15 +50,17 @@ flowchart TD
 
 **Module layout**
 
+All Python source lives under `src/`.
+
 | File | Responsibility |
 |------|----------------|
-| `app.py` | Streamlit UI, session state, orchestration |
-| `chat_api_handler.py` | Endpoint router (Ollama / OpenAI), text + image + RAG calls |
-| `vectordb_handler.py` | Chroma client + Ollama embeddings |
-| `pdf_handler.py` | PDF text extraction, chunking, indexing |
-| `audio_handler.py` | Whisper transcription (webm→wav via ffmpeg) |
-| `database_operations.py` | SQLite repositories (messages, settings) |
-| `utils.py` / `prompt_templates.py` / `html_templates.py` | Helpers, prompts, UI styling |
+| `src/app.py` | Streamlit UI, session state, orchestration |
+| `src/chat_api_handler.py` | Endpoint router (Ollama / OpenAI), text + image + RAG calls |
+| `src/vectordb_handler.py` | Chroma client + Ollama embeddings |
+| `src/pdf_handler.py` | PDF text extraction, chunking, indexing |
+| `src/audio_handler.py` | Whisper transcription (webm→wav via ffmpeg) |
+| `src/database_operations.py` | SQLite repositories (messages, settings) |
+| `src/utils.py` / `src/prompt_templates.py` / `src/html_templates.py` | Helpers, prompts, UI styling |
 
 ## Tech Stack
 
@@ -105,8 +107,8 @@ Running Ollama inside Docker is slow on Windows (system calls are translated bet
    ```
 4. **Run**:
    ```bash
-   python3 database_operations.py   # initializes the SQLite database
-   streamlit run app.py
+   python3 src/database_operations.py   # initializes the SQLite database
+   streamlit run src/app.py
    ```
 5. **Pull models** as described above.
 
