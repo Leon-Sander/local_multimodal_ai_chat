@@ -1,0 +1,41 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.10"]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements*.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      # Catches import-time breakage (config paths, heavy deps) with a clear
+      # error before the test run. torch is deliberately NOT installed: only
+      # audio_handler needs it, and audio stays manual (see TESTING.md).
+      - name: Smoke-import the modules under test
+        run: python -c "import chat_api_handler, database_operations, utils"
+        env:
+          PYTHONPATH: src
+
+      - name: Run tests
+        run: pytest

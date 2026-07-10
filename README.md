@@ -34,8 +34,8 @@ Local Multimodal AI Chat integrates several AI models behind a single Streamlit 
 
 ```mermaid
 flowchart TD
-    U["User"] --> UI["Streamlit UI (app.py)"]
-    UI -->|"record / upload audio"| W["Whisper ASR (audio_handler)"]
+    U["User"] --> UI["Streamlit UI (src/app.py)"]
+    UI -->|"record / upload audio"| W["Whisper ASR (src/audio_handler)"]
     W --> R["ChatAPIHandler router"]
     UI -->|"text / image / PDF / commands"| R
     UI -->|"upload PDF"| P["PDF handler: pypdfium2 + chunking"]
@@ -50,15 +50,17 @@ flowchart TD
 
 **Module layout**
 
+All Python source lives under `src/`.
+
 | File | Responsibility |
 |------|----------------|
-| `app.py` | Streamlit UI, session state, orchestration |
-| `chat_api_handler.py` | Endpoint router (Ollama / OpenAI), text + image + RAG calls |
-| `vectordb_handler.py` | Chroma client + Ollama embeddings |
-| `pdf_handler.py` | PDF text extraction, chunking, indexing |
-| `audio_handler.py` | Whisper transcription (webm→wav via ffmpeg) |
-| `database_operations.py` | SQLite repositories (messages, settings) |
-| `utils.py` / `prompt_templates.py` / `html_templates.py` | Helpers, prompts, UI styling |
+| `src/app.py` | Streamlit UI, session state, orchestration |
+| `src/chat_api_handler.py` | Endpoint router (Ollama / OpenAI), text + image + RAG calls |
+| `src/vectordb_handler.py` | Chroma client + Ollama embeddings |
+| `src/pdf_handler.py` | PDF text extraction, chunking, indexing |
+| `src/audio_handler.py` | Whisper transcription (webm→wav via ffmpeg) |
+| `src/database_operations.py` | SQLite repositories (messages, settings) |
+| `src/utils.py` / `src/prompt_templates.py` / `src/html_templates.py` | Helpers, prompts, UI styling |
 
 ## Tech Stack
 
@@ -105,14 +107,31 @@ Running Ollama inside Docker is slow on Windows (system calls are translated bet
    ```
 4. **Run**:
    ```bash
-   python3 database_operations.py   # initializes the SQLite database
-   streamlit run app.py
+   python3 src/database_operations.py   # initializes the SQLite database
+   streamlit run src/app.py
    ```
 5. **Pull models** as described above.
 
 ## Configuration
 
 Key settings live in `config.yaml` (Ollama base URL and embedding model, Whisper model, Chroma path/collection, chat-sessions DB path). Runtime options (endpoint, model, chunk size/overlap, retrieved chunks, chat memory) are adjustable in the sidebar and persisted per user.
+
+## Testing
+
+A small contract-level test suite covers the SQLite layer, utility functions, and API request construction (UI, audio, and real model calls stay manual by design):
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+
+Or run it inside the app container (no local Python setup, matches the CI environment):
+
+```bash
+docker compose -f docker-compose_without_ollama.yml run --rm app sh -c "pip install --no-cache-dir -q pytest && pytest"
+```
+
+CI runs the suite on Ubuntu and Windows. See [TESTING.md](./TESTING.md) for the philosophy and what is deliberately not tested.
 
 ## Roadmap
 
@@ -124,6 +143,7 @@ Key settings live in `config.yaml` (Ollama base URL and embedding model, Whisper
 <details>
 <summary>Changelog (highlights)</summary>
 
+- **2026-07** (v2.6.0): Contract-level test suite (21 tests) plus GitHub Actions CI on Ubuntu and Windows; moved all source into `src/` for a cleaner root. Breaking: run commands are now `streamlit run src/app.py`.
 - **2025-05** (v2.5.0): file upload via the chat bar.
 - **2024-09**: Model serving moved to the Ollama API; OpenAI API added.
 - **2024-08**: Docker Compose added.

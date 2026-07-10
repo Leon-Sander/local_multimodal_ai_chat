@@ -9,7 +9,7 @@ services:
       - "8501:8501"
     environment:
       - PYTHONUNBUFFERED=1
-    command: /bin/sh -c "python3 database_operations.py && streamlit run app.py --server.fileWatcherType poll"
+    command: /bin/sh -c "python3 src/database_operations.py && streamlit run src/app.py --server.fileWatcherType poll"
     depends_on:
       - ollama
 
