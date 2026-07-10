@@ -7,7 +7,6 @@ services:
       - ./:/app
     ports:
       - "8501:8501"
-      - "11434:11434"
     environment:
       - PYTHONUNBUFFERED=1
     command: /bin/sh -c "python3 src/database_operations.py && streamlit run src/app.py --server.fileWatcherType poll"
