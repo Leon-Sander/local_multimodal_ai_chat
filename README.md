@@ -2,6 +2,7 @@
 
 A self-hostable, multimodal chat application that runs open-source models locally. Chat with **text, images, PDFs, and voice** in one interface, powered by local models via **Ollama** (with an optional **OpenAI API** fallback), retrieval-augmented generation over your own PDFs, and speech-to-text with **Whisper**.
 
+[![tests](https://github.com/Leon-Sander/Local-Multimodal-AI-Chat/actions/workflows/tests.yml/badge.svg)](https://github.com/Leon-Sander/Local-Multimodal-AI-Chat/actions/workflows/tests.yml)
 [![Stars](https://img.shields.io/github/stars/Leon-Sander/Local-Multimodal-AI-Chat?style=flat)](https://github.com/Leon-Sander/Local-Multimodal-AI-Chat/stargazers)
 [![Forks](https://img.shields.io/github/forks/Leon-Sander/Local-Multimodal-AI-Chat?style=flat)](https://github.com/Leon-Sander/Local-Multimodal-AI-Chat/forks)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPLv3-blue.svg)](./LICENSE.md)
