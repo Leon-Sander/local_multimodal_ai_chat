@@ -1,6 +1,6 @@
 # Testing
 
-This repo has a small, deliberate test suite: **20 contract tests** over the parts of the code whose behavior is stable by design. It is meant to stay cheap to maintain — including for forks.
+This repo has a small, deliberate test suite: **21 contract tests** over the parts of the code whose behavior is stable by design. It is meant to stay cheap to maintain — including for forks.
 
 ## Philosophy: contracts, not structure
 
@@ -16,9 +16,11 @@ A few places accept **medium churn** deliberately, each documented inline where 
 
 | File | Contracts |
 |------|-----------|
-| `tests/test_database_operations.py` (9) | message roundtrips (text + binary), LLM-context feed ordering/filtering, per-session delete isolation, session id listing, settings read-through defaults + persistence, restart durability |
+| `tests/test_database_operations.py` (10) | message roundtrips (text + binary), LLM-context feed ordering/filtering, per-session delete isolation, session id listing, settings read-through defaults + persistence, restart durability |
 | `tests/test_utils.py` (3) | base64/data-URL wire format, `/command` dispatch, config save/load roundtrip |
 | `tests/test_chat_api_handler.py` (8) | endpoint routing (ollama/openai/unknown), request bodies + auth headers, image wire formats (Ollama bare-b64 vs OpenAI data URL), RAG context stuffing, error-shape handling (string vs nested object) |
+
+Counts are executed test cases, not test functions: `test_database_operations.py` has 9 test functions but one is parametrized over `["image", "audio"]`, so it runs 10 cases — 21 in total.
 
 ## What deliberately stays untested (and why)
 

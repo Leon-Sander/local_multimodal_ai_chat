@@ -125,6 +125,12 @@ pip install -r requirements-dev.txt
 pytest
 ```
 
+Or run it inside the app container (no local Python setup, matches the CI environment):
+
+```bash
+docker compose -f docker-compose_without_ollama.yml run --rm app sh -c "pip install --no-cache-dir -q pytest && pytest"
+```
+
 CI runs the suite on Ubuntu and Windows. See [TESTING.md](./TESTING.md) for the philosophy and what is deliberately not tested.
 
 ## Roadmap
@@ -137,6 +143,7 @@ CI runs the suite on Ubuntu and Windows. See [TESTING.md](./TESTING.md) for the 
 <details>
 <summary>Changelog (highlights)</summary>
 
+- **2026-07** (v2.6.0): Contract-level test suite (21 tests) plus GitHub Actions CI on Ubuntu and Windows; moved all source into `src/` for a cleaner root. Breaking: run commands are now `streamlit run src/app.py`.
 - **2025-05** (v2.5.0): file upload via the chat bar.
 - **2024-09**: Model serving moved to the Ollama API; OpenAI API added.
 - **2024-08**: Docker Compose added.
